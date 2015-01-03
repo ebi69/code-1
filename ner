@@ -1,0 +1,97 @@
+import nltk
+from nltk.tag.sequential import *
+from nltk.corpus import udhr
+from nltk.corpus import PlaintextCorpusReader
+from nltk.corpus import brown
+from nltk.corpus.reader import CategorizedPlaintextCorpusReader
+from nltk.corpus.reader import TaggedCorpusReader
+
+
+
+efile=open("efile.txt","r+")
+train=open("train.txt",'w')
+test=open("test.txt",'w')
+
+train_test=[]
+corpus=[]
+corpus2=[]
+
+
+for line in efile :
+        l=line.split()
+        print(l)
+        if len(l)==3:
+            x=l.pop(0)
+            t=tuple(l)
+            z=corpus.append(t)
+            
+            
+cor=corpus
+print(cor)
+
+
+x=-1
+t=[] 
+while x<len(cor)-1 :
+        t=[]
+        x=x+1
+        while cor[x][0] != '.':
+            t.append(cor[x])
+            x=x+1
+            if x== len(cor):
+                break
+        corpus2.append(t)
+
+
+a=train_test.append(corpus2[:5999])
+b=train_test.append(corpus2[5999:])
+print(a)
+print(b)
+
+r=train_test
+print(r)
+
+
+test=[]
+training=train_test[0]
+testing=train_test[1]
+print("training: ",training)
+print("testing : ",testing)
+
+for i in testing:
+    for j in i :
+        test.append(j[0]) 
+
+
+default_tagger=nltk.DefaultTagger('O')
+unigram_tagger=nltk.UnigramTagger(training,backoff=default_tagger)
+bigram_tagger=nltk.BigramTagger(training,backoff= unigram_tagger)
+trigram_tagger=nltk.TrigramTagger(training,backoff=bigram_tagger)
+
+print("uni : ",unigram_tagger)
+print("big : ",bigram_tagger)
+print("tri : ",trigram_tagger)
+
+
+def tagger(data):
+    return trigram_tagger.tag(data)
+#evaluate=trigram_tagger.evaluate(testing)
+
+
+learned = tagger(test)
+taged=open('tagged.txt','w')
+for tag in learned :
+    taged.write(str(tag[0]))
+    taged.write('/')
+    taged.write(str(tag[1]))
+    taged.write('\n')
+    taged.close()
+ 
+#printing the evaluation score
+ 
+print (" the evaluation is:",evaluate )
+
+
+
+
+
