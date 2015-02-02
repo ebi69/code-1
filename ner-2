@@ -1,0 +1,139 @@
+# NLTK استفاده از کتابخانه 
+import nltk
+from nltk.tag.sequential import *
+from nltk.corpus import udhr
+from nltk.corpus import PlaintextCorpusReader
+from nltk.corpus import brown
+from nltk.corpus.reader import CategorizedPlaintextCorpusReader
+from nltk.corpus.reader import TaggedCorpusReader
+
+
+
+# efile همان دیتاست ما هست
+efile=open("efile.txt","r+")
+train=open("train.txt",'w')
+test=open("test.txt",'w')
+
+train_test=[]
+corpus=[]
+corpus2=[]
+
+#اجرا این حلقه داده به همراه برچسب آنرا جدا میکند در هر خط از دیتا ست
+for line in efile :
+        l=line.split()
+        print(l)
+        if len(l)==3:
+            x=l.pop(0)
+            t=tuple(l)
+            z=corpus.append(t)
+            
+            
+cor=corpus
+print(cor)
+
+
+x=-1
+t=[] 
+while x<len(cor)-1 :
+        t=[]
+        x=x+1
+        while cor[x][0] != '.':
+            t.append(cor[x])
+            x=x+1
+            if x== len(cor):
+                break
+        corpus2.append(t)
+
+#ساختن داده های آموزشی از روی دیتا ست
+a=train_test.append(corpus2[:5999])
+b=train_test.append(corpus2[5999:])
+print(a)
+print(b)
+r=train_test
+print(r)
+test=[]
+training=train_test[0]
+testing=train_test[1]
+print("training: ",training)
+print("testing : ",testing)
+
+
+# برداشتن برچسب ها از روی داده ها برای آماده سازی مرحله تست
+for i in testing:
+    for j in i :
+        test.append(j[0]) 
+
+
+
+#تعیین یکسری قوانین برای بهبود کارایی
+ 
+word_patterns = [
+
+(r'.*دان$', 'B-LOC'),
+(r'.*زار$', 'B-LOC'),
+(r'.*سار$', 'B-LOC'),
+(r'.*کده$', 'B-LOC'),
+(r'.*گاه$', 'B-LOC'),
+(r'.*لاخ$', 'B-LOC'),
+(r'.*وان$', 'B-LOC'),
+(r'.*آباد$', 'B-LOC'),
+(r'.*زاد$', 'B-PERS'),
+(r'.*پور$', 'B-PERS'),
+(r'.*نژاد$', 'B-PERS'),
+(r'.*زاده$', 'B-PERS'),
+]
+  
+
+
+
+# training آموزش دیدن برچسب زن ها به کمک داده های
+default_tagger=nltk.DefaultTagger('O')
+unigram_tagger=nltk.UnigramTagger(training,backoff=default_tagger)
+bigram_tagger=nltk.BigramTagger(training,backoff= unigram_tagger)
+trigram_tagger=nltk.TrigramTagger(training,backoff=bigram_tagger)
+
+print("uni : ",unigram_tagger)
+print("big : ",bigram_tagger)
+print("tri : ",trigram_tagger)
+
+# ابتدا برچسب ها رو از داده های تست بر میدارد و خودش به آن برچسب میزند و در نهایت با برچسب های اولیه مقایسه می کند تا دقت را بیابد
+def tagger(data):
+    return trigram_tagger.tag(data)
+#evaluate=trigram_tagger.evaluate(testing)
+
+
+learned = tagger(test)
+taged=open('tagged.txt','w')
+for tag in learned :
+    taged.write(str(tag[0]))
+    taged.write('/')
+    taged.write(str(tag[1]))
+    taged.write('\n')
+    taged.close()
+ 
+#printing the evaluation score
+ 
+print (" the evaluation is:",evaluate )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
