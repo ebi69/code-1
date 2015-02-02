@@ -1,12 +1,13 @@
 # NLTK استفاده از کتابخانه 
 import nltk
+from nltk.tag import brill
+from nltk.tag import crf
 from nltk.tag.sequential import *
 from nltk.corpus import udhr
 from nltk.corpus import PlaintextCorpusReader
 from nltk.corpus import brown
 from nltk.corpus.reader import CategorizedPlaintextCorpusReader
-from nltk.corpus.reader import TaggedCorpusReader
-
+from nltk.corpus.reader import TaggedCorpusReader 
 
 
 # efile همان دیتاست ما هست
