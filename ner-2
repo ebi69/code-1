@@ -88,6 +88,7 @@ word_patterns = [
 
 # training آموزش دیدن برچسب زن ها به کمک داده های
 default_tagger=nltk.DefaultTagger('O')
+final_tagger=nltk.tag.RegexpTagger(word_patterns, backoff=default_tagger)
 unigram_tagger=nltk.UnigramTagger(training,backoff=default_tagger)
 bigram_tagger=nltk.BigramTagger(training,backoff= unigram_tagger)
 trigram_tagger=nltk.TrigramTagger(training,backoff=bigram_tagger)
